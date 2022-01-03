@@ -1,0 +1,195 @@
+/*Criar Banco de Dados*/
+create database BD_LIVRARIA
+
+/*Para escolher BD*/ 
+use BD_LIVRARIA
+
+
+
+/* order by */
+
+select *
+from TB_LIVRO 
+where preco between '39' and '89'
+order by 
+
+select * 
+from TB_VENDA 
+where ValorBrutoVenda between  '100' and '200'
+order by asc
+
+select * 
+from TB_EDITORA 
+where idEditora not between '3' and '5'
+order by desc
+
+select * 
+from TB_VENDA 
+where DataVenda not between  '03/09/2020' and '10/09/2020'
+order by desc
+
+
+
+
+
+/*Funcoes Agregadas - Sao Calculos simples dentro das declaracoes do Select*/ /* - COUNT - MIN - MAX - AVG*/
+
+*/ Qual o livro mais barato?*/
+select MIN (preocoLivro) from TB_LIVRO
+
+*/ Qual o livro mais caro?*/
+select MAX (precoLivro) from TB_LIVRO
+
+*/Qual o valor em reais de livros que tenho no estoque?*/
+select SUM (precoLivro)  AS Total_Estoque from TB_Livro
+
+*/ex:
+Total_Estoque
+160.00*/
+
+*/Quantos titulos de livros tenho em estoque?*/
+select COUNT (*)  AS  Total_Estoque from TB_Livro
+
+*/Qual a media em reais de Livros que tenho  no estoque?*/
+select AVG (precoLivro)  AS MEDIA from TB_Livro
+
+
+
+*/between */ 
+
+select *
+from TB_LIVRO 
+where * between '39' and '89'
+
+select * 
+from TB_VENDA 
+where ValorBrutoVenda between  '100' and '200'
+
+select * 
+from TB_EDITORA 
+where idEditora not between '3' and '5'
+
+select * 
+from TB_VENDA 
+where DataVenda not between  '03/09/2020' and '10/09/2020'
+
+
+*/Operadores de Comparacao*/
+
+select idEditora, nomeFantasia
+from TB_EDITORA
+where idEditora > '5'
+
+select Preco
+from TB_LIVRO
+where Preco < '50'
+
+select idCliente, NomeCliente
+from TB_CLIENTE
+where NomeCliente <= 'Rafaela'
+
+
+
+
+create table TB_EDITORA(
+idEditora  integer identity not null,
+nomeFantasia  varchar  (255)not null,
+razaoSocial  varchar  (255)not null,
+endereco  varchar  (255)not null,
+telefone  char  (15) not null,
+constraint  PK_idEditora  primary key  (idEditora)
+)
+
+insert into TB_EDITORA(nomeFantasia, razaoSocial, endereco, telefone)
+values ( 'Campus', 'Campus', 'Sao Paulo', '(11)95285-9696' )
+
+insert into TB_EDITORA (nomeFantasia, razaoSocial, endereco, telefone)
+values ('Editora Intrinseca Ltda', 'Editora Intrinseca', 'Rio de Janeiro', '(21) 3206-7400'
+
+insert into TB_EDITORA (nomeFantasia, razaoSocial, endereco, telefone)
+values ('Editora Criativo', 'Criativo', 'Sao Paulo', '(11)3662-4466'
+
+
+select * from TB_EDITORA
+select * from TB_CLENTE
+select * from TB_LIVRO
+select * from TB_PEDIDO
+select * from TB_VENDA
+
+create table TB_CLIENTE(
+idCliente  integer identity not null,
+NomeCliente  varchar  (255) not null,
+RgCliente  varchar  (15) not null,
+CPFCliente   bigint not null,
+EnderecoCliente  varchar (255) not null,
+constraint PK_idCliente primary key (idCliente)
+)
+
+insert into TB_CLENTE(NomeCliente, RgCliente, CPFCliente, EnderecoCliente)
+values ( 'ANA', '46782101-5', 35115366504, 'Rua da Flores, 50 Jardim dos Campus SP')
+
+insert into TB_CLENTE (NomeCliente, RgCliente, CPFCliente, EnderecoCliente)
+values ('Bruno', '45856924-7', 47856889754, 'Rua jardins , 145 Jardins SP' )
+
+insert into TB_CLENTE(NomeCliente, RgCliente, CPFCliente, EnderecoCliente)
+values ('Jose', '85146259-9', 7136498207, 'Rua Campos Belo, 45 Itapark SP'
+
+
+
+create table TB_LIVRO(
+idLivro   integer identity not null,
+idEditora  integer not null,
+isbnLivro  bigint not null,
+Titulo  varchar (255) not null,
+Preco  numeric(10,2) not null,
+Categoria  varchar (255) not null,
+constraint  PK_idLIvro primary key (idLIvro),
+constraint  FK_idEditora foreign key (idEditora) references TB_EDITORA
+)
+
+insert into TB_LIVRO(idEditora, isbnLivro, Titulo, Preco Categoria)
+values( 1, 978853525019, 'EAD na Pratica', 69.50, 'Educacao')
+
+insert into TB_LIVRO(idEditora, isbnLivro, Titulo, Preco Categoria)
+values( 2, 9788598078694, 'O Ladrao de Raios', 70.00, 'Ficcao')
+
+insert into TB_LIVRO(idEditora, isbnLivro, Titulo, Preco Categoria)
+values ( 3, 9788582580639, 'Os dois lados da Guerra Civil', 40.00, 'Historia')
+
+create table TB_PEDIDO(
+idPedido  integer identity not null,
+idlivro  integer not null,
+QtdePedido  int not null,
+constraint  PK_idPedido primary key (idPedido),
+constraint  FK_idLivro foreign key (idLivro) references TB_LIVRO
+)
+
+insert into TB_PEDIDO( idLivro, QtdePedido)
+values (1, 2)
+
+insert into TB_PEDIDO( idLivro, QtdePedido)
+values (2, 5)
+
+insert into TB_PEDIDO( idLivro, QtdePedido)
+values (3, 1)
+
+create table TB_VENDA(
+idVenda  integer identity not null,
+idCliente  integer not null,
+idPedido  interger not nul,
+DataVenda  date not null,
+DescontoVenda  int not null,
+ValorBrutoVenda  numeric (10,2) not null,
+constraint PK_idVenda  primary key (idVenda),
+constraint FK_idCliente foreign key (idcliente) references TB_CLENTE,
+constraint FK_idPedido foreign key (idPedido) references TB_PEDIDO
+)
+
+insert into TB_VENDA(idCliente, idPedido, DataVenda, DescontoVenda, ValorBrutoVenda)
+values (1, 1, '19/05/2020', 5, 150.00)
+
+insert into TB_VENDA(idCliente, idPedido, DataVenda, DescontoVenda, ValorBrutoVenda)
+values (2, 2, '8/06/2020', 5, 350.00)
+
+insert into TB_VENDA(idCliente, idPedido, DataVenda, DescontoVenda, ValorBrutoVenda)
+values (3, 3, '07/08/2020', 3, 40.00)
